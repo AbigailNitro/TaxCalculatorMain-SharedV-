@@ -52,7 +52,7 @@
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(294, 24);
-            menuStrip1.TabIndex = 4;
+            menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
             // loadToolStripMenuItem
@@ -87,6 +87,7 @@
             currentTaxScheduleToolStripMenuItem.Name = "currentTaxScheduleToolStripMenuItem";
             currentTaxScheduleToolStripMenuItem.Size = new Size(185, 22);
             currentTaxScheduleToolStripMenuItem.Text = "Current Tax Schedule";
+            currentTaxScheduleToolStripMenuItem.Click += currentTaxScheduleToolStripMenuItem_Click;
             // 
             // employeeTaxesToolStripMenuItem
             // 
@@ -113,7 +114,7 @@
             lblTaxableIncome.Location = new Point(29, 49);
             lblTaxableIncome.Name = "lblTaxableIncome";
             lblTaxableIncome.Size = new Size(92, 15);
-            lblTaxableIncome.TabIndex = 199;
+            lblTaxableIncome.TabIndex = 1;
             lblTaxableIncome.Text = "Taxable income:";
             // 
             // lblTaxOwed
@@ -122,7 +123,7 @@
             lblTaxOwed.Location = new Point(29, 84);
             lblTaxOwed.Name = "lblTaxOwed";
             lblTaxOwed.Size = new Size(101, 15);
-            lblTaxOwed.TabIndex = 299;
+            lblTaxOwed.TabIndex = 2;
             lblTaxOwed.Text = "Income tax owed:";
             // 
             // txbTaxableIncome
@@ -130,34 +131,34 @@
             txbTaxableIncome.Location = new Point(142, 46);
             txbTaxableIncome.Name = "txbTaxableIncome";
             txbTaxableIncome.Size = new Size(100, 23);
-            txbTaxableIncome.TabIndex = 0;
+            txbTaxableIncome.TabIndex = 3;
             // 
             // txbTaxOwed
             // 
             txbTaxOwed.Location = new Point(142, 81);
             txbTaxOwed.Name = "txbTaxOwed";
             txbTaxOwed.Size = new Size(100, 23);
-            txbTaxOwed.TabIndex = 1;
+            txbTaxOwed.TabIndex = 4;
             // 
             // btnCalc
             // 
             btnCalc.Location = new Point(12, 164);
             btnCalc.Name = "btnCalc";
             btnCalc.Size = new Size(75, 23);
-            btnCalc.TabIndex = 2;
+            btnCalc.TabIndex = 5;
             btnCalc.Text = "Calculate";
             btnCalc.UseVisualStyleBackColor = true;
             btnCalc.Click += btnCalc_Click;
             // 
             // btnExit
             // 
-            btnExit.Location = new Point(207, 187);
+            btnExit.Location = new Point(207, 164);
             btnExit.Name = "btnExit";
             btnExit.Size = new Size(75, 23);
-            btnExit.TabIndex = 3;
+            btnExit.TabIndex = 6;
             btnExit.Text = "Exit";
             btnExit.UseVisualStyleBackColor = true;
-            btnExit.Click += btnExit_Click;
+            btnExit.Click += btnExit_Click_1;
             // 
             // Form1
             // 
