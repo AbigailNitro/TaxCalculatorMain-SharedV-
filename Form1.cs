@@ -187,12 +187,27 @@ namespace TaxCalculatorMain2
             //uncomment this code to print out 1 full slice from the array
             //int tempV = 1;
             //MessageBox.Show(TaxSchedule[tempV, 0] + ", " + TaxSchedule[tempV, 1] + ", " + TaxSchedule[tempV, 2] + ", " + TaxSchedule[tempV, 3] + ", " + TaxSchedule[tempV, 4]);
+
             
-            //https://stackoverflow.com/questions/7460652/c-sharp-messagebox-for-all-items-in-array
-            string TaxScheduleFull = string.Join(Environment.NewLine, TaxSchedule);
-            MessageBox.Show(String.Join(Environment.NewLine, TaxScheduleFull));
+            string ToDisplay = string.Empty;
+            for (int i = 0; i <= TaxSchedule.GetUpperBound(0); i++)
+            {
+                if (i == 0)
+                {
+                    ToDisplay += "Slice, MinIncome, MaxIncome, MinTax, TaxRate\n";
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + "0" + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+                else if (i == TaxSchedule.GetUpperBound(0))
+                {
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + "inf" + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+                else
+                {
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+            }
 
-
+            MessageBox.Show(ToDisplay);
         }
 
         private void btnExit_Click_1(object sender, EventArgs e)
