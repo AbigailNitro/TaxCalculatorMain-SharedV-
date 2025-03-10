@@ -132,74 +132,34 @@ namespace TaxCalculatorMain2
 
         }
 
-        private void employeeIncomeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void btnCalc_Click(object sender, EventArgs e)
         {
+            //really long code to call the tax table method and put it in the textbox
             txbTaxOwed.Text = Convert.ToString(CalculateTax(Convert.ToDecimal(txbTaxableIncome.Text)));
-
-            //DEFINE ARRAY
-            //string[,] TaxSchedule = new string[Slice.Count, 5];
-
-
-
-            //loop to convert lists to array, 
-            //for (int i = 0; i < Slice.Count; i++)
-            //{
-            //TaxSchedule[i, 0] = Slice[0 + i];
-            //TaxSchedule[i, 1] = MinIncome[0 + i];
-            //TaxSchedule[i, 2] = MaxIncome[0 + i];
-            //TaxSchedule[i, 3] = MinTax[0 + i];
-            //TaxSchedule[i, 4] = TaxRate[0 + i];
-            //}
-
-
-
-
-            //code to view an aspect of the array for testing purposes, feel free to delete
-            //MessageBox.Show(this.TaxSchedule(Convert.ToInt32(txbTaxableIncome.Text), Convert.ToInt32(txbTaxOwed.Text)));
-            //MessageBox.Show(Convert.ToString(Slice.Count - 1));
         }
 
         private void currentTaxScheduleToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //DEFINE ARRAY
-            string[,] TaxSchedule = new string[Slice.Count, 5];
-
-            //loop to convert lists to array, 
-            for (int i = 0; i < Slice.Count; i++)
-            {
-                TaxSchedule[i, 0] = Slice[0 + i];
-                TaxSchedule[i, 1] = MinIncome[0 + i];
-                TaxSchedule[i, 2] = MaxIncome[0 + i];
-                TaxSchedule[i, 3] = MinTax[0 + i];
-                TaxSchedule[i, 4] = TaxRate[0 + i];
-            }
-            //uncomment this code to print out 1 full slice from the array
-            //int tempV = 1;
-            //MessageBox.Show(TaxSchedule[tempV, 0] + ", " + TaxSchedule[tempV, 1] + ", " + TaxSchedule[tempV, 2] + ", " + TaxSchedule[tempV, 3] + ", " + TaxSchedule[tempV, 4]);
-
-
+            
             string ToDisplay = string.Empty;
-            for (int i = 0; i <= TaxSchedule.GetUpperBound(0); i++)
+            for (int i = 0; i <= Slice.Count - 1; i++)
             {
                 //while I cant fix the unusual null values from being inserted into the lists, i can cancel them out for this
 
                 if (i == 0)
                 {
                     ToDisplay += "Slice, MinIncome, MaxIncome, MinTax, TaxRate\n";
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + "0" + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                    ToDisplay += (this.TaxSchedule(i, 0) + ", " + "0" + ", " + this.TaxSchedule(i, 2) + ", " + this.TaxSchedule(i, 3) + ", " + this.TaxSchedule(i, 4) + i + "\n");
                 }
-                else if (i == TaxSchedule.GetUpperBound(0))
+                else if (i == Slice.Count - 1)
                 {
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + "inf" + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                    ToDisplay += (this.TaxSchedule(i, 0) + ", " + this.TaxSchedule(i, 1) + ", " + "inf" + ", " + this.TaxSchedule(i, 3) + ", " + this.TaxSchedule(i, 4) + i + "\n");
                 }
                 else
                 {
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                    ToDisplay += (this.TaxSchedule(i, 0) + ", " + this.TaxSchedule(i, 1) + ", " + this.TaxSchedule(i, 2) + ", " + this.TaxSchedule(i, 3) + ", " + this.TaxSchedule(i, 4) + i + "\n");
                 }
             }
 

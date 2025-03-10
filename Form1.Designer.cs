@@ -43,11 +43,13 @@
             txbTaxOwed = new TextBox();
             btnCalc = new Button();
             btnExit = new Button();
+            menuStrip2 = new MenuStrip();
             menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
             // 
+            menuStrip1.BackColor = SystemColors.ActiveCaption;
             menuStrip1.Items.AddRange(new ToolStripItem[] { loadToolStripMenuItem, showToolStripMenuItem, saveToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
@@ -163,6 +165,16 @@
             btnExit.UseVisualStyleBackColor = true;
             btnExit.Click += btnExit_Click_1;
             // 
+            // menuStrip2
+            // 
+            menuStrip2.Anchor = AnchorStyles.Bottom;
+            menuStrip2.Dock = DockStyle.None;
+            menuStrip2.Location = new Point(0, 177);
+            menuStrip2.Name = "menuStrip2";
+            menuStrip2.Size = new Size(128, 24);
+            menuStrip2.TabIndex = 7;
+            menuStrip2.Text = "menuStrip2";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -175,9 +187,10 @@
             Controls.Add(lblTaxOwed);
             Controls.Add(lblTaxableIncome);
             Controls.Add(menuStrip1);
+            Controls.Add(menuStrip2);
             MainMenuStrip = menuStrip1;
             Name = "Form1";
-            Text = "Form1";
+            Text = "Tax Calculator";
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ResumeLayout(false);
@@ -201,5 +214,6 @@
         private TextBox txbTaxOwed;
         private Button btnCalc;
         private Button btnExit;
+        private MenuStrip menuStrip2;
     }
 }
