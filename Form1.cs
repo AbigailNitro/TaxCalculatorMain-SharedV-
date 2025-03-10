@@ -1,3 +1,4 @@
+using System.Diagnostics.Eventing.Reader;
 using System.Reflection.Metadata;
 
 namespace TaxCalculatorMain2
@@ -18,6 +19,49 @@ namespace TaxCalculatorMain2
 
         List<string> EmpID = new List<String>();
         List<string> EmpInc = new List<String>();
+        bool EmpLoaded = false;
+        bool TaxLoaded = false;
+        //I managed to convert the array conversion into it's own method
+        //so we dont have to copy paste
+        private string TaxSchedule(int vert, int hori)
+        {
+            //now unfortuantely the code sorts the array every time its recalled,
+            //which would lead to increased hardware usage but i cant fix it without
+            //first figuring out how to define the array outside the method using
+            //slice count which iim not worried about now, just know that its something im aware of
+
+            //code from https://csharpforums.net/threads/convert-a-list-object-to-a-string-2d-array.5865/
+
+            string[,] testing = new string[Slice.Count, 5];
+
+            for (int i = 0; i < Slice.Count; i++)
+            {
+                testing[i, 0] = Slice[0 + i];
+                testing[i, 1] = MinIncome[0 + i];
+                testing[i, 2] = MaxIncome[0 + i];
+                testing[i, 3] = MinTax[0 + i];
+                testing[i, 4] = TaxRate[0 + i];
+                //Array that can have its info recalled via "TaxSchedule[yvalue,xvalue]"
+                //to get a value, look at the provided csv from the homework. to get the
+                //y value, get the line number and subtract 2 (one because we left out
+                //the names and another because arrays start with position 0)
+                //to get the x value, just get the column number (starting from 0
+                //[so from left to right it would be 0,1,2,3,4])
+            }
+            return testing[vert, hori];
+        }
+
+        private string EmpTable(int vert, int hori)
+        {
+            string[,] testing = new string[EmpID.Count, 2];
+            for (int i = 0; i < EmpID.Count; i++)
+            {
+                testing[i, 0] = EmpID[0 + i];
+                testing[i, 1] = EmpInc[0 + i];
+            }
+            return testing[vert, hori];
+        }
+
 
         public void taxScheduleToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -57,7 +101,7 @@ namespace TaxCalculatorMain2
                             MaxIncome.Add(Values[2]);
                             MinTax.Add(Values[3]);
                             TaxRate.Add(Values[4]);
-                            
+
 
                             //Yeah so i tried to fix the unusual null value that comes with reading
                             //the csv, (specifically with minimum income for slice 1) and I cant fix it
@@ -65,19 +109,19 @@ namespace TaxCalculatorMain2
 
                             //if (Values[1] == "")
                             //{
-                                //MessageBox.Show("DUDE");
+                            //MessageBox.Show("DUDE");
                             //}
 
                             //if (MinIncome.Count == 3)
                             //{
-                                //string temp = MinIncome[2];
-                                //MinIncome.Insert(1, Convert.ToString(0));
-                                //MinIncome.Insert(2, temp);
+                            //string temp = MinIncome[2];
+                            //MinIncome.Insert(1, Convert.ToString(0));
+                            //MinIncome.Insert(2, temp);
                             //}
 
 
                         }
-
+                        TaxLoaded = true;
                         filestream.Close();
                     }
                 }
@@ -89,6 +133,192 @@ namespace TaxCalculatorMain2
         }
 
         private void employeeIncomeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCalc_Click(object sender, EventArgs e)
+        {
+            txbTaxOwed.Text = Convert.ToString(CalculateTax(Convert.ToDecimal(txbTaxableIncome.Text)));
+
+            //DEFINE ARRAY
+            //string[,] TaxSchedule = new string[Slice.Count, 5];
+
+
+
+            //loop to convert lists to array, 
+            //for (int i = 0; i < Slice.Count; i++)
+            //{
+            //TaxSchedule[i, 0] = Slice[0 + i];
+            //TaxSchedule[i, 1] = MinIncome[0 + i];
+            //TaxSchedule[i, 2] = MaxIncome[0 + i];
+            //TaxSchedule[i, 3] = MinTax[0 + i];
+            //TaxSchedule[i, 4] = TaxRate[0 + i];
+            //}
+
+
+
+
+            //code to view an aspect of the array for testing purposes, feel free to delete
+            //MessageBox.Show(this.TaxSchedule(Convert.ToInt32(txbTaxableIncome.Text), Convert.ToInt32(txbTaxOwed.Text)));
+            //MessageBox.Show(Convert.ToString(Slice.Count - 1));
+        }
+
+        private void currentTaxScheduleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //DEFINE ARRAY
+            string[,] TaxSchedule = new string[Slice.Count, 5];
+
+            //loop to convert lists to array, 
+            for (int i = 0; i < Slice.Count; i++)
+            {
+                TaxSchedule[i, 0] = Slice[0 + i];
+                TaxSchedule[i, 1] = MinIncome[0 + i];
+                TaxSchedule[i, 2] = MaxIncome[0 + i];
+                TaxSchedule[i, 3] = MinTax[0 + i];
+                TaxSchedule[i, 4] = TaxRate[0 + i];
+            }
+            //uncomment this code to print out 1 full slice from the array
+            //int tempV = 1;
+            //MessageBox.Show(TaxSchedule[tempV, 0] + ", " + TaxSchedule[tempV, 1] + ", " + TaxSchedule[tempV, 2] + ", " + TaxSchedule[tempV, 3] + ", " + TaxSchedule[tempV, 4]);
+
+
+            string ToDisplay = string.Empty;
+            for (int i = 0; i <= TaxSchedule.GetUpperBound(0); i++)
+            {
+                //while I cant fix the unusual null values from being inserted into the lists, i can cancel them out for this
+
+                if (i == 0)
+                {
+                    ToDisplay += "Slice, MinIncome, MaxIncome, MinTax, TaxRate\n";
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + "0" + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+                else if (i == TaxSchedule.GetUpperBound(0))
+                {
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + "inf" + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+                else
+                {
+                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
+                }
+            }
+
+            MessageBox.Show(ToDisplay);
+        }
+
+        private void btnExit_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+
+
+
+        //Code from ryan, had to revise so that it can input any value and make use of the assigned array
+        // private decimal CalculateTax(decimal income)
+        // {
+        //    decimal tax = income switch
+        //     {
+        //         <= 11000 => income * 0.10m,
+        //         <= 44725 => 1100 + (income - 11000) * 0.12m,
+        //         <= 95375 => 5147 + (income - 44725) * 0.22m,
+        //         <= 182100 => 16290 + (income - 95375) * 0.24m,
+        //         <= 231250 => 37104 + (income - 182100) * 0.32m,
+        //         <= 578125 => 52832 + (income - 231250) * 0.35m,
+        //         _ => 174238.25m + (income - 578125) * 0.37m
+
+        //     };
+        //     return tax;
+
+        //revised code
+        //took me about 3 hours to finish this lol
+        //ignore the commented code, those are the remains of my bugtesting
+        private decimal CalculateTax(decimal income)
+        {
+            decimal tax = 0;
+            if (TaxLoaded == false)
+            {
+                MessageBox.Show("Please load a tax schedule", "Tax Schedule Needed");
+                return tax;
+            }
+            else
+            {
+                //MessageBox.Show("method started");
+
+                for (int i = 0; i < Slice.Count; i++)
+                {
+                    //MessageBox.Show("loop started");
+                    if (i == 0 && income < Convert.ToDecimal(this.TaxSchedule(0, 2)))
+                    {
+                        tax = (income - Convert.ToDecimal(this.TaxSchedule(0, 3))) * (Convert.ToDecimal(this.TaxSchedule(0, 4)) / 100m);
+
+                        //MessageBox.Show("used if 1");
+                        i = Slice.Count;
+                    }
+                    else if ((i == Slice.Count - 1) && income >= Convert.ToDecimal(this.TaxSchedule((Slice.Count - 1), 1)))
+                    {
+                        tax = (income - Convert.ToDecimal(this.TaxSchedule((Slice.Count - 1), 3))) * (Convert.ToDecimal(this.TaxSchedule((Slice.Count - 1), 4)) / 100m);
+
+                        //MessageBox.Show("used if 2");
+                        i = Slice.Count;
+                    }
+                    // a bunch of AND stuff because ii dont want random errors popping up
+                    else if (i != 0 && income >= Convert.ToDecimal(this.TaxSchedule(i, 1)) && income < Convert.ToDecimal(this.TaxSchedule(i, 2)) && i != Convert.ToUInt32(Slice.Count - 1))
+                    {
+                        tax = (income - Convert.ToDecimal(this.TaxSchedule(i, 3))) * (Convert.ToDecimal(this.TaxSchedule(i, 4)) / 100m);
+
+                        //MessageBox.Show("used if 3");
+                        i = Slice.Count;
+                    }
+                    else
+                    {
+                        //MessageBox.Show("finished loop #" + i);
+                    }
+
+
+
+                }
+                //MessageBox.Show(Convert.ToString(income));
+                return tax;
+            }
+        }
+
+        private void employeeTaxesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (EmpLoaded == false)
+            {
+                MessageBox.Show("Please load an employee roster", "Employee Roster Needed");
+            }
+
+            //code from ryan
+            if (EmpID.Count == 0 || EmpInc.Count == 0)
+            {
+                MessageBox.Show("No employee data available to calculate taxes.");
+                return;
+            }
+
+            //code from ryan
+            if (EmpID.Count != EmpInc.Count)
+            {
+                MessageBox.Show("There is a mismatch between the number of employees and calculated taxes.");
+                return;
+            }
+
+            //based on my previous code
+            string ToDisplay = string.Empty;
+            ToDisplay += "Employee ID, Employee Tax Owed \n";
+            for (int i = 0; i < EmpInc.Count; i++)
+            {
+                ToDisplay += (EmpTable(i, 0) + ", " + this.CalculateTax(Convert.ToDecimal(EmpTable(i, 1))) + "\n");
+            }
+
+            MessageBox.Show(ToDisplay);
+        }
+
+       
+
+        private void employeeIncomeToolStripMenuItem_Click_2(object sender, EventArgs e)
         {
             //found this code using https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.openfiledialog?view=windowsdesktop-9.0
 
@@ -125,6 +355,7 @@ namespace TaxCalculatorMain2
 
                             }
 
+                            EmpLoaded = true;
                             filestream.Close();
                         }
                     }
@@ -139,80 +370,6 @@ namespace TaxCalculatorMain2
                     MessageBox.Show(ex.Message, "IOException");
                 }
             }
-        }
-
-        private void btnCalc_Click(object sender, EventArgs e)
-        {
-            //code from https://csharpforums.net/threads/convert-a-list-object-to-a-string-2d-array.5865/
-
-            //DEFINE ARRAY
-            string[,] TaxSchedule = new string[Slice.Count, 5];
-
-            //loop to convert lists to array, 
-            for (int i = 0; i < Slice.Count; i++)
-            {
-                TaxSchedule[i, 0] = Slice[0 + i];
-                TaxSchedule[i, 1] = MinIncome[0 + i];
-                TaxSchedule[i, 2] = MaxIncome[0 + i];
-                TaxSchedule[i, 3] = MinTax[0 + i];
-                TaxSchedule[i, 4] = TaxRate[0 + i];
-            }
-            //Array that can have its info recalled via "TaxSchedule[yvalue,xvalue]"
-            //to get a value, look at the provided csv from the homework. to get the
-            //y value, get the line number and subtract 2 (one because we left out
-            //the names and another because arrays start with position 0)
-            //to get the x value, just get the column number (starting from 0
-            //[so from left to right it would be 0,1,2,3,4])
-            
-
-
-            //code to view an aspect of the array for testing purposes, feel free to delete
-            MessageBox.Show(TaxSchedule[2, 2]);
-        }
-
-        private void currentTaxScheduleToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //DEFINE ARRAY
-            string[,] TaxSchedule = new string[Slice.Count, 5];
-
-            //loop to convert lists to array, 
-            for (int i = 0; i < Slice.Count; i++)
-            {
-                TaxSchedule[i, 0] = Slice[0 + i];
-                TaxSchedule[i, 1] = MinIncome[0 + i];
-                TaxSchedule[i, 2] = MaxIncome[0 + i];
-                TaxSchedule[i, 3] = MinTax[0 + i];
-                TaxSchedule[i, 4] = TaxRate[0 + i];
-            }
-            //uncomment this code to print out 1 full slice from the array
-            //int tempV = 1;
-            //MessageBox.Show(TaxSchedule[tempV, 0] + ", " + TaxSchedule[tempV, 1] + ", " + TaxSchedule[tempV, 2] + ", " + TaxSchedule[tempV, 3] + ", " + TaxSchedule[tempV, 4]);
-
-            
-            string ToDisplay = string.Empty;
-            for (int i = 0; i <= TaxSchedule.GetUpperBound(0); i++)
-            {
-                if (i == 0)
-                {
-                    ToDisplay += "Slice, MinIncome, MaxIncome, MinTax, TaxRate\n";
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + "0" + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
-                }
-                else if (i == TaxSchedule.GetUpperBound(0))
-                {
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + "inf" + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
-                }
-                else
-                {
-                    ToDisplay += (TaxSchedule[i, 0] + ", " + TaxSchedule[i, 1] + ", " + TaxSchedule[i, 2] + ", " + TaxSchedule[i, 3] + ", " + TaxSchedule[i, 4] + i + "\n");
-                }
-            }
-
-            MessageBox.Show(ToDisplay);
-        }
-
-        private void btnExit_Click_1(object sender, EventArgs e)
-        {
-            this.Close();
         }
     }
 }

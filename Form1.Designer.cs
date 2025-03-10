@@ -74,6 +74,7 @@
             employeeIncomeToolStripMenuItem.Name = "employeeIncomeToolStripMenuItem";
             employeeIncomeToolStripMenuItem.Size = new Size(181, 22);
             employeeIncomeToolStripMenuItem.Text = "Employee Income ...";
+            employeeIncomeToolStripMenuItem.Click += employeeIncomeToolStripMenuItem_Click_2;
             // 
             // showToolStripMenuItem
             // 
@@ -94,6 +95,7 @@
             employeeTaxesToolStripMenuItem.Name = "employeeTaxesToolStripMenuItem";
             employeeTaxesToolStripMenuItem.Size = new Size(185, 22);
             employeeTaxesToolStripMenuItem.Text = "Employee Taxes";
+            employeeTaxesToolStripMenuItem.Click += employeeTaxesToolStripMenuItem_Click;
             // 
             // saveToolStripMenuItem
             // 
@@ -137,6 +139,7 @@
             // 
             txbTaxOwed.Location = new Point(142, 81);
             txbTaxOwed.Name = "txbTaxOwed";
+            txbTaxOwed.ReadOnly = true;
             txbTaxOwed.Size = new Size(100, 23);
             txbTaxOwed.TabIndex = 4;
             // 
