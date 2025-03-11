@@ -3,6 +3,11 @@ using System.Reflection.Metadata;
 
 namespace TaxCalculatorMain2
 {
+
+    //Team members:
+    //Abigail Hitchcock
+    //Richard Lopez
+    //Daniiel Thompson (who did not contribute to any of the below code)
     public partial class Form1 : Form
     {
         public Form1()
@@ -175,7 +180,7 @@ namespace TaxCalculatorMain2
 
 
 
-        //Code from ryan, had to revise so that it can input any value and make use of the assigned array
+        //Code from Richard, had to revise so that it can input any value and make use of the assigned array
         // private decimal CalculateTax(decimal income)
         // {
         //    decimal tax = income switch
@@ -251,14 +256,14 @@ namespace TaxCalculatorMain2
                 MessageBox.Show("Please load an employee roster", "Employee Roster Needed");
             }
 
-            //code from ryan
+            //code from Richard
             if (EmpID.Count == 0 || EmpInc.Count == 0)
             {
                 MessageBox.Show("No employee data available to calculate taxes.");
                 return;
             }
 
-            //code from ryan
+            //code from Richard
             if (EmpID.Count != EmpInc.Count)
             {
                 MessageBox.Show("There is a mismatch between the number of employees and calculated taxes.");
